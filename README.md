@@ -117,13 +117,63 @@ print(f"Satisfiable: {result.Z > 0}")
 
 CatBP implements the HATCC algorithm from the paper:
 
-1. **Nerve Construction**: Build the intersection graph of factors
-2. **Backbone Selection**: Choose a maximum spanning tree
-3. **Cycle Analysis**: Identify fundamental cycles from non-tree edges
-4. **Homology Computation**: Filter to H₁-essential cycles
-5. **Holonomy Calculation**: Compute parallel transport around cycles
-6. **Mode Augmentation**: Add mode variables for non-trivial holonomy
-7. **Tree BP**: Run exact inference on the augmented tree
+```
+Factor Graph Definition
+         │
+         ▼
+┌─────────────────────────────────────────────────────────┐
+│                  TOPOLOGY COMPILER                       │
+│  ┌──────────┐   ┌──────────┐   ┌───────────┐           │
+│  │  Nerve   │ → │ Backbone │ → │  Chords   │           │
+│  │ (G_N)    │   │  (MST)   │   │ (H₁ basis)│           │
+│  └──────────┘   └──────────┘   └───────────┘           │
+│                       │                                  │
+│                       ▼                                  │
+│              ┌────────────────┐                         │
+│              │   Holonomy     │                         │
+│              │ Computation    │                         │
+│              └────────────────┘                         │
+│                       │                                  │
+│                       ▼                                  │
+│              ┌────────────────┐                         │
+│              │ Mode Variables │                         │
+│              │  (Selectors)   │                         │
+│              └────────────────┘                         │
+│                       │                                  │
+│                       ▼                                  │
+│              ┌────────────────┐                         │
+│              │ Execution Plan │                         │
+│              │   (BPPlan)     │                         │
+│              └────────────────┘                         │
+└─────────────────────────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────────────────────────┐
+│                    CODE EMISSION                         │
+│  ┌──────────┐   ┌──────────┐   ┌──────────┐            │
+│  │ Upward   │   │ Downward │   │ Finalize │            │
+│  │ Program  │   │ Program  │   │ Program  │            │
+│  └──────────┘   └──────────┘   └──────────┘            │
+└─────────────────────────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────────────────────────┐
+│                  VIRTUAL MACHINE                         │
+│  ┌──────────┐   ┌──────────┐   ┌──────────┐            │
+│  │ Register │   │ Semiring │   │  Slot    │            │
+│  │  Bank    │   │ Runtime  │   │  Store   │            │
+│  └──────────┘   └──────────┘   └──────────┘            │
+│         │              │              │                  │
+│         └──────────────┴──────────────┘                 │
+│                        │                                 │
+│                        ▼                                 │
+│                 ┌─────────────┐                          │
+│                 │   Beliefs   │                          │
+│                 │  Marginals  │                          │
+│                 │      Z      │                          │
+│                 └─────────────┘                          │
+└─────────────────────────────────────────────────────────┘
+```
 
 ```
 Factor Graph → Nerve → Backbone → Cycles → Holonomy → Modes → Exact BP
