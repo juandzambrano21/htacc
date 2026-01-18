@@ -1,0 +1,10 @@
+# CatBP: Categorical Belief Propagation
+# Core dependencies
+
+numpy>=1.20.0
+scipy>=1.7.0
+networkx>=2.6.0
+
+# Development dependencies (uncomment for development)
+# pytest>=7.0.0
+# pytest-cov>=3.0.0
