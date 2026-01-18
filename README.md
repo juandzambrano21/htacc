@@ -6,7 +6,7 @@
 
 This is the reference implementation for [*Categorical Belief Propagation: Sheaf-Theoretic Inference via Descent and Holonomy*](https://arxiv.org/abs/2601.04456) (ter Horst, Mahadevan, Zambrano, 2026).
 
-Standard belief propagation fails on graphs with cycles—it either diverges or returns approximate answers. CatBP detects *why* it fails (holonomy obstructions on the factor nerve) and fixes it (mode augmentation), yielding exact results where BP cannot.
+CatBP is an implementation of **Holonomy-Aware Tree-Compiled Computation (HATCC)**, a categorical framework for exact inference on factor graphs with loopy structure. The system compiles factor graphs into executable plans that exploit sheaf-theoretic structure, detecting and resolving descent obstructions via holonomy computation on the factor nerve.
 
 ---
 
